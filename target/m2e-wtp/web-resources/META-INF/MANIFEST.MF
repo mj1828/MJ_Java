@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: MJ_WS
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: zyc
+Implementation-Vendor-Id: com.mj
+Build-Jdk: 1.8.0_171
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/MJ_Parent/MJ_WS
+Created-By: Maven Integration for Eclipse
+

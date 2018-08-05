@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mj.mapper.ZAPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.mj.entity.ZAPermission">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="roleId" jdbcType="INTEGER" property="roleId" />
+    <result column="menuId" jdbcType="INTEGER" property="menuId" />
+    <result column="addTime" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="addUser" jdbcType="VARCHAR" property="addUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+  <insert id="insert" parameterType="com.mj.entity.ZAPermission">
+    insert into ZAPermission (id, roleId, menuId, 
+      addTime, addUser, updateTime, 
+      updateUser)
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{menuId,jdbcType=INTEGER}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{addUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mj.entity.ZAPermission">
+    insert into ZAPermission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="roleId != null">
+        roleId,
+      </if>
+      <if test="menuId != null">
+        menuId,
+      </if>
+      <if test="addTime != null">
+        addTime,
+      </if>
+      <if test="addUser != null">
+        addUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="menuId != null">
+        #{menuId,jdbcType=INTEGER},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addUser != null">
+        #{addUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="getByRoleId" resultType="ZAPermission" parameterType="int">
+  	select * from zapermission where roleid = #{roleId}
+  </select>
+</mapper>
