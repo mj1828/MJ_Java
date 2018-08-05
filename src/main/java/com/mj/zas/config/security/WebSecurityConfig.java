@@ -143,7 +143,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				httpServletResponse.setContentType("application/json;charset=utf-8");
 				PrintWriter out = httpServletResponse.getWriter();
 				ObjectMapper objectMapper = new ObjectMapper();
-				out.write(ResultUtil.success(objectMapper.writeValueAsString(UserUtil.getCurrentHr())).toJSONString());
+				out.write(ResultUtil.success(objectMapper.writeValueAsString(UserUtil.getCurrentHr())).toString());
 				out.flush();
 				out.close();
 			}
@@ -160,11 +160,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				httpServletResponse.setContentType("application/json;charset=utf-8");
 				PrintWriter out = httpServletResponse.getWriter();
 				if (e instanceof UsernameNotFoundException || e instanceof BadCredentialsException) {
-					out.write(ResultUtil.fail("用户名或密码输入错误，登录失败!").toJSONString());
+					out.write(ResultUtil.fail("用户名或密码输入错误，登录失败!").toString());
 				} else if (e instanceof DisabledException) {
-					out.write(ResultUtil.fail("账户被禁用，登录失败，请联系管理员!").toJSONString());
+					out.write(ResultUtil.fail("账户被禁用，登录失败，请联系管理员!").toString());
 				} else {
-					out.write(ResultUtil.fail("登录失败!").toJSONString());
+					out.write(ResultUtil.fail("登录失败!").toString());
 				}
 				out.flush();
 				out.close();

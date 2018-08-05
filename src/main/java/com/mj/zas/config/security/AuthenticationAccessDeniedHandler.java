@@ -24,7 +24,7 @@ public class AuthenticationAccessDeniedHandler implements AccessDeniedHandler {
 		resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		resp.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-		out.write(ResultUtil.fail("权限不足，请联系管理员!").toJSONString());
+		out.write(ResultUtil.fail("权限不足，请联系管理员!").toString());
 		out.flush();
 		out.close();
 	}

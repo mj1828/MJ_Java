@@ -1,4 +1,4 @@
-package com.mj.config;
+package com.mj.common.config;
 
 import java.util.Properties;
 

@@ -1,6 +1,5 @@
 package com.mj.zas.config.security;
 
-
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -33,9 +32,12 @@ public class UrlGrantedAuthority implements GrantedAuthority {
 		this.method = method;
 	}
 
+	public UrlGrantedAuthority(String permissionUrl) {
+		this.permissionUrl = permissionUrl;
+	}
+
 	@Override
 	public String getAuthority() {
 		return this.permissionUrl + ";" + this.method;
 	}
 }
-
