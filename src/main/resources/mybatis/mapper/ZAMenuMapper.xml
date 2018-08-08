@@ -135,11 +135,11 @@
   </select>
   <!-- 查询一级菜单  -->
   <select id="listParent" resultType="ZAMenu"> 
-  	select * from zamenu where parid = 0 order by orderflag
+  	select * from zamenu where parid = 0
   </select>
   
   <select id="listSon" resultType="ZAMenu" parameterType = "String">
-  	select * from zamenu where parid = #{id} order by orderflag 
+  	select * from zamenu where parid = #{id}
   </select>
   
   <select id="selectById" resultType="ZAMenu" parameterType = "int">

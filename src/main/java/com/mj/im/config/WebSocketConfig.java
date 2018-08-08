@@ -25,7 +25,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
 		// 在网页上可以通过"/applicationName/hello"来和服务器的WebSocket连接
-		stompEndpointRegistry.addEndpoint("/hello").setAllowedOrigins("*").withSockJS();
+//		stompEndpointRegistry.addEndpoint("/hello").setAllowedOrigins("*").withSockJS();
+		stompEndpointRegistry.addEndpoint("/hello").setAllowedOrigins("*");
 	}
 
 	/**
