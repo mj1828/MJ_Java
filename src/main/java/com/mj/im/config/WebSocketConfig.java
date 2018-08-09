@@ -1,5 +1,7 @@
 package com.mj.im.config;
 
+import java.security.Principal;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.CloseStatus;
@@ -11,6 +13,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
+
+import com.mj.im.service.UserSessionService;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -24,9 +28,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	 */
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-		// 在网页上可以通过"/applicationName/hello"来和服务器的WebSocket连接
 //		stompEndpointRegistry.addEndpoint("/hello").setAllowedOrigins("*").withSockJS();
-		stompEndpointRegistry.addEndpoint("/hello").setAllowedOrigins("*");
+		stompEndpointRegistry.addEndpoint("ws").setAllowedOrigins("*");
 	}
 
 	/**
@@ -39,7 +42,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
 		// 应用程序以/app为前缀，代理目的地以/topic、/user为前缀
 		registry.enableSimpleBroker("/topic", "/user");
-		registry.setApplicationDestinationPrefixes("/app");
+		registry.setApplicationDestinationPrefixes("/mj");
 		registry.setUserDestinationPrefix("/user");
 	}
 
@@ -52,8 +55,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 					@Override
 					public void afterConnectionEstablished(final WebSocketSession session) throws Exception {
 						// 客户端与服务器端建立连接后，此处记录谁上线了
-						System.out.println("建立链接");
-//						String username = session.getPrincipal().getName();
+						Principal userInfo = session.getPrincipal();
+						if (userInfo != null) {
+							UserSessionService.add(userInfo.getName(), session);
+							System.err.println("保存用户到列表" + userInfo.getName());
+						}
 						super.afterConnectionEstablished(session);
 					}
 
@@ -61,8 +67,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 					public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus)
 							throws Exception {
 						// 客户端与服务器端断开连接后，此处记录谁下线了
-//						String username = session.getPrincipal().getName();
-						System.out.println("断开链接" + closeStatus.getCode());
+						Principal userInfo = session.getPrincipal();
+						if (userInfo != null) {
+							UserSessionService.del(userInfo.getName());
+							System.err.println("将用户从列表中删除" + userInfo.getName());
+						}
 						super.afterConnectionClosed(session, closeStatus);
 					}
 				};
