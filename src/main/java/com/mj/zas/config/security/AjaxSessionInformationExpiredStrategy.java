@@ -11,7 +11,7 @@ import org.springframework.security.web.session.SessionInformationExpiredStrateg
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mj.zas.util.RequestUtils;
+import com.mj.util.RequestUtils;
 
 @Component
 public class AjaxSessionInformationExpiredStrategy implements SessionInformationExpiredStrategy {

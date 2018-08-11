@@ -14,6 +14,8 @@ import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mj.util.JsonUtil;
+import com.mj.util.ResultUtil;
 import com.mj.zas.config.security.UrlGrantedAuthority;
 import com.mj.zas.entity.ZAMenu;
 import com.mj.zas.entity.ZAPermission;
@@ -24,8 +26,6 @@ import com.mj.zas.mapper.ZAPermissionMapper;
 import com.mj.zas.mapper.ZARoleMapper;
 import com.mj.zas.mapper.ZAUserMapper;
 import com.mj.zas.service.UserService;
-import com.mj.zas.util.JsonUtil;
-import com.mj.zas.util.ResultUtil;
 
 /**
  * @ClassName: UserServiceImpl

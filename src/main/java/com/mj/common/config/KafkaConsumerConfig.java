@@ -15,7 +15,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
-import com.mj.common.Listener.KafkaCustomListener;
+import com.mj.common.listener.KafkaCustomListener;
 
 @Configuration
 @EnableKafka

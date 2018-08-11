@@ -1,4 +1,4 @@
-package com.mj.zas.util;
+package com.mj.util;
 
 import java.util.HashMap;
 import java.util.Map;

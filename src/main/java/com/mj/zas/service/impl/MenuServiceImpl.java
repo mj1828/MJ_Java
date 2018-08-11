@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mj.util.JsonUtil;
+import com.mj.util.ResultUtil;
 import com.mj.zas.entity.ZAMenu;
 import com.mj.zas.mapper.ZAMenuMapper;
 import com.mj.zas.service.MenuService;
-import com.mj.zas.util.JsonUtil;
-import com.mj.zas.util.ResultUtil;
 
 @Service("menuService")
 public class MenuServiceImpl implements MenuService {

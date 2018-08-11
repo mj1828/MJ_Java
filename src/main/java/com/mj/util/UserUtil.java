@@ -1,4 +1,4 @@
-package com.mj.zas.util;
+package com.mj.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;

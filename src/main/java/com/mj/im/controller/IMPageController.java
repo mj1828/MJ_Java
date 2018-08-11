@@ -1,23 +1,71 @@
 package com.mj.im.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import com.alibaba.fastjson.JSONObject;
+import com.mj.util.ResultUtil;
+import com.mj.util.StringUtil;
+
+/**
+ * 消息控制器
+ * @author: MJ
+ * @date: 2018年8月11日
+ */
+@RestController
 public class IMPageController {
 
-	@GetMapping("/socket")
-	public String socket() {
-		return "socket";
+	@Autowired
+	private KafkaTemplate<String, JSONObject> kafkaTemplate;
+
+	private static final String MSGTOPIC = "msgTopic";// 消息主题
+
+	private static final String WBMSGTOPIC = "wbMsgtopic";// 白板消息主题
+
+	/**
+	 * @Description: 接受消息，发布到kafka
+	 * @return String  
+	 * @throws
+	 */
+	@MessageMapping("msg")
+	public String msg(@RequestBody String msg) {
+		// TODO 根据配置项判断是否敏感词过滤
+		// TODO 根据配置项判断是否备份聊天室内容
+		if (StringUtil.isNotNull(msg)) {
+			JSONObject msgContent = JSONObject.parseObject(msg);
+			if (msgContent != null) {
+				String chatRoomId = msgContent.getString("ChatRoomId");
+				if (StringUtil.isNotNull(chatRoomId)) {
+					kafkaTemplate.send(MSGTOPIC, chatRoomId, msgContent);
+					return ResultUtil.success("消息发送成功");
+				}
+			}
+		}
+		return ResultUtil.fail("消息发送失败");
 	}
 
-	@GetMapping("/imList")
-	public String imList() {
-		return "imList";
+	/**
+	 * @Description: 接收白板消息
+	 * @return String  
+	 * @throws
+	 */
+	@MessageMapping("wbMsg")
+	public String wbMsg(@RequestBody String msg) {
+		// TODO 根据配置项判断是否备份聊天室内容
+		if (StringUtil.isNotNull(msg)) {
+			JSONObject msgContent = JSONObject.parseObject(msg);
+			if (msgContent != null) {
+				String chatRoomId = msgContent.getString("ChatRoomId");
+				if (StringUtil.isNotNull(chatRoomId)) {
+					kafkaTemplate.send(WBMSGTOPIC, chatRoomId, msgContent);
+					return ResultUtil.success("白板消息发送成功");
+				}
+			}
+		}
+		return ResultUtil.fail("白板消息发送失败");
 	}
 
-	@GetMapping("/imDetail")
-	public String imDetail() {
-		return "imDetail";
-	}
 }

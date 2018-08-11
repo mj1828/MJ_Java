@@ -35,10 +35,10 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mj.util.MD5Util;
+import com.mj.util.ResultUtil;
+import com.mj.util.UserUtil;
 import com.mj.zas.service.UserService;
-import com.mj.zas.util.MD5Util;
-import com.mj.zas.util.ResultUtil;
-import com.mj.zas.util.UserUtil;
 
 /**
  * Created by sang on 2017/12/28.

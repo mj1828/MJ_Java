@@ -1,4 +1,4 @@
-package com.mj.zas.util;
+package com.mj.util;
 
 /**
  * Created by yangyibo on 17/2/7.
