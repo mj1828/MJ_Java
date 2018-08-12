@@ -52,13 +52,11 @@ public class IMUserInfoService {
 	// 聊天室删除用户
 	public boolean del(String userName) {
 		synchronized (SYCN) {
-			if (IMUserSessionService.del(userName)) {
-				JSONObject userInfo = (JSONObject) redisTemplate.opsForHash().get(USERINFO, userName);
-				redisTemplate.opsForHash().delete(USERINFO, userName);
-				String chatRoomId = userInfo.getString("ChatRoomId");
-				if (redisTemplate.opsForList().remove(CHATROOMLIST + chatRoomId, 1, userName) != null) {
-					return true;
-				}
+			JSONObject userInfo = (JSONObject) redisTemplate.opsForHash().get(USERINFO, userName);
+			redisTemplate.opsForHash().delete(USERINFO, userName);
+			String chatRoomId = userInfo.getString("ChatRoomId");
+			if (redisTemplate.opsForList().remove(CHATROOMLIST + chatRoomId, 1, userName) != null) {
+				return true;
 			}
 			return false;
 		}
