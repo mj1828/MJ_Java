@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mj.im.mapper.ZCMessageRecordMapper">
+  <resultMap id="BaseResultMap" type="com.mj.im.entity.ZCMessageRecord">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ChatRoomId" jdbcType="VARCHAR" property="chatroomid" />
+    <result column="FromMemberId" jdbcType="BIGINT" property="frommemberid" />
+    <result column="FromNick" jdbcType="VARCHAR" property="fromnick" />
+    <result column="FromAvator" jdbcType="VARCHAR" property="fromavator" />
+    <result column="FromUserName" jdbcType="VARCHAR" property="fromusername" />
+    <result column="Message" jdbcType="VARCHAR" property="message" />
+    <result column="MsgType" jdbcType="VARCHAR" property="msgtype" />
+    <result column="MsgTimestamp" jdbcType="VARCHAR" property="msgtimestamp" />
+    <result column="Memo2" jdbcType="VARCHAR" property="memo2" />
+    <result column="Prop5" jdbcType="VARCHAR" property="prop5" />
+    <result column="Prop6" jdbcType="VARCHAR" property="prop6" />
+    <result column="Prop7" jdbcType="VARCHAR" property="prop7" />
+    <result column="Prop8" jdbcType="VARCHAR" property="prop8" />
+    <result column="AddUser" jdbcType="VARCHAR" property="adduser" />
+    <result column="AddTime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="ModifyUser" jdbcType="VARCHAR" property="modifyuser" />
+    <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ChatRoomId, FromMemberId, FromNick, FromAvator, FromUserName, Message, MsgType, 
+    MsgTimestamp, Memo2, Prop5, Prop6, Prop7, Prop8, AddUser, AddTime, ModifyUser, ModifyTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zcmessagerecord
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from zcmessagerecord
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mj.im.entity.ZCMessageRecord">
+    insert into zcmessagerecord (ID, ChatRoomId, FromMemberId, 
+      FromNick, FromAvator, FromUserName, 
+      Message, MsgType, MsgTimestamp, 
+      Memo2, Prop5, Prop6, 
+      Prop7, Prop8, AddUser, 
+      AddTime, ModifyUser, ModifyTime
+      )
+    values (#{id,jdbcType=BIGINT}, #{chatroomid,jdbcType=VARCHAR}, #{frommemberid,jdbcType=BIGINT}, 
+      #{fromnick,jdbcType=VARCHAR}, #{fromavator,jdbcType=VARCHAR}, #{fromusername,jdbcType=VARCHAR}, 
+      #{message,jdbcType=VARCHAR}, #{msgtype,jdbcType=VARCHAR}, #{msgtimestamp,jdbcType=VARCHAR}, 
+      #{memo2,jdbcType=VARCHAR}, #{prop5,jdbcType=VARCHAR}, #{prop6,jdbcType=VARCHAR}, 
+      #{prop7,jdbcType=VARCHAR}, #{prop8,jdbcType=VARCHAR}, #{adduser,jdbcType=VARCHAR}, 
+      #{addtime,jdbcType=TIMESTAMP}, #{modifyuser,jdbcType=VARCHAR}, #{modifytime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mj.im.entity.ZCMessageRecord">
+    insert into zcmessagerecord
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="chatroomid != null">
+        ChatRoomId,
+      </if>
+      <if test="frommemberid != null">
+        FromMemberId,
+      </if>
+      <if test="fromnick != null">
+        FromNick,
+      </if>
+      <if test="fromavator != null">
+        FromAvator,
+      </if>
+      <if test="fromusername != null">
+        FromUserName,
+      </if>
+      <if test="message != null">
+        Message,
+      </if>
+      <if test="msgtype != null">
+        MsgType,
+      </if>
+      <if test="msgtimestamp != null">
+        MsgTimestamp,
+      </if>
+      <if test="memo2 != null">
+        Memo2,
+      </if>
+      <if test="prop5 != null">
+        Prop5,
+      </if>
+      <if test="prop6 != null">
+        Prop6,
+      </if>
+      <if test="prop7 != null">
+        Prop7,
+      </if>
+      <if test="prop8 != null">
+        Prop8,
+      </if>
+      <if test="adduser != null">
+        AddUser,
+      </if>
+      <if test="addtime != null">
+        AddTime,
+      </if>
+      <if test="modifyuser != null">
+        ModifyUser,
+      </if>
+      <if test="modifytime != null">
+        ModifyTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="chatroomid != null">
+        #{chatroomid,jdbcType=VARCHAR},
+      </if>
+      <if test="frommemberid != null">
+        #{frommemberid,jdbcType=BIGINT},
+      </if>
+      <if test="fromnick != null">
+        #{fromnick,jdbcType=VARCHAR},
+      </if>
+      <if test="fromavator != null">
+        #{fromavator,jdbcType=VARCHAR},
+      </if>
+      <if test="fromusername != null">
+        #{fromusername,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null">
+        #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtimestamp != null">
+        #{msgtimestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="memo2 != null">
+        #{memo2,jdbcType=VARCHAR},
+      </if>
+      <if test="prop5 != null">
+        #{prop5,jdbcType=VARCHAR},
+      </if>
+      <if test="prop6 != null">
+        #{prop6,jdbcType=VARCHAR},
+      </if>
+      <if test="prop7 != null">
+        #{prop7,jdbcType=VARCHAR},
+      </if>
+      <if test="prop8 != null">
+        #{prop8,jdbcType=VARCHAR},
+      </if>
+      <if test="adduser != null">
+        #{adduser,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null">
+        #{modifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mj.im.entity.ZCMessageRecord">
+    update zcmessagerecord
+    <set>
+      <if test="chatroomid != null">
+        ChatRoomId = #{chatroomid,jdbcType=VARCHAR},
+      </if>
+      <if test="frommemberid != null">
+        FromMemberId = #{frommemberid,jdbcType=BIGINT},
+      </if>
+      <if test="fromnick != null">
+        FromNick = #{fromnick,jdbcType=VARCHAR},
+      </if>
+      <if test="fromavator != null">
+        FromAvator = #{fromavator,jdbcType=VARCHAR},
+      </if>
+      <if test="fromusername != null">
+        FromUserName = #{fromusername,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null">
+        Message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null">
+        MsgType = #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtimestamp != null">
+        MsgTimestamp = #{msgtimestamp,jdbcType=VARCHAR},
+      </if>
+      <if test="memo2 != null">
+        Memo2 = #{memo2,jdbcType=VARCHAR},
+      </if>
+      <if test="prop5 != null">
+        Prop5 = #{prop5,jdbcType=VARCHAR},
+      </if>
+      <if test="prop6 != null">
+        Prop6 = #{prop6,jdbcType=VARCHAR},
+      </if>
+      <if test="prop7 != null">
+        Prop7 = #{prop7,jdbcType=VARCHAR},
+      </if>
+      <if test="prop8 != null">
+        Prop8 = #{prop8,jdbcType=VARCHAR},
+      </if>
+      <if test="adduser != null">
+        AddUser = #{adduser,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        AddTime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null">
+        ModifyUser = #{modifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mj.im.entity.ZCMessageRecord">
+    update zcmessagerecord
+    set ChatRoomId = #{chatroomid,jdbcType=VARCHAR},
+      FromMemberId = #{frommemberid,jdbcType=BIGINT},
+      FromNick = #{fromnick,jdbcType=VARCHAR},
+      FromAvator = #{fromavator,jdbcType=VARCHAR},
+      FromUserName = #{fromusername,jdbcType=VARCHAR},
+      Message = #{message,jdbcType=VARCHAR},
+      MsgType = #{msgtype,jdbcType=VARCHAR},
+      MsgTimestamp = #{msgtimestamp,jdbcType=VARCHAR},
+      Memo2 = #{memo2,jdbcType=VARCHAR},
+      Prop5 = #{prop5,jdbcType=VARCHAR},
+      Prop6 = #{prop6,jdbcType=VARCHAR},
+      Prop7 = #{prop7,jdbcType=VARCHAR},
+      Prop8 = #{prop8,jdbcType=VARCHAR},
+      AddUser = #{adduser,jdbcType=VARCHAR},
+      AddTime = #{addtime,jdbcType=TIMESTAMP},
+      ModifyUser = #{modifyuser,jdbcType=VARCHAR},
+      ModifyTime = #{modifytime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mj.im.mapper.ZCChatRoomMemberMapper">
+  <resultMap id="BaseResultMap" type="com.mj.im.entity.ZCChatRoomMember">
+    <id column="MemberID" jdbcType="VARCHAR" property="memberid" />
+    <id column="ChatRoomID" jdbcType="VARCHAR" property="chatroomid" />
+    <result column="MemberType" jdbcType="VARCHAR" property="membertype" />
+    <result column="Gag" jdbcType="INTEGER" property="gag" />
+    <result column="Prohibit" jdbcType="INTEGER" property="prohibit" />
+    <result column="Prop1" jdbcType="VARCHAR" property="prop1" />
+    <result column="Prop2" jdbcType="VARCHAR" property="prop2" />
+    <result column="Prop3" jdbcType="VARCHAR" property="prop3" />
+    <result column="Prop4" jdbcType="VARCHAR" property="prop4" />
+    <result column="AddUser" jdbcType="VARCHAR" property="adduser" />
+    <result column="AddTime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="ModifyUser" jdbcType="VARCHAR" property="modifyuser" />
+    <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MemberID, ChatRoomID, MemberType, Gag, Prohibit, Prop1, Prop2, Prop3, Prop4, AddUser, 
+    AddTime, ModifyUser, ModifyTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.mj.im.entity.ZCChatRoomMemberKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zcchatroommember
+    where MemberID = #{memberid,jdbcType=VARCHAR}
+      and ChatRoomID = #{chatroomid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.mj.im.entity.ZCChatRoomMemberKey">
+    delete from zcchatroommember
+    where MemberID = #{memberid,jdbcType=VARCHAR}
+      and ChatRoomID = #{chatroomid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.mj.im.entity.ZCChatRoomMember">
+    insert into zcchatroommember (MemberID, ChatRoomID, MemberType, 
+      Gag, Prohibit, Prop1, 
+      Prop2, Prop3, Prop4, 
+      AddUser, AddTime, ModifyUser, 
+      ModifyTime)
+    values (#{memberid,jdbcType=VARCHAR}, #{chatroomid,jdbcType=VARCHAR}, #{membertype,jdbcType=VARCHAR}, 
+      #{gag,jdbcType=INTEGER}, #{prohibit,jdbcType=INTEGER}, #{prop1,jdbcType=VARCHAR}, 
+      #{prop2,jdbcType=VARCHAR}, #{prop3,jdbcType=VARCHAR}, #{prop4,jdbcType=VARCHAR}, 
+      #{adduser,jdbcType=VARCHAR}, #{addtime,jdbcType=TIMESTAMP}, #{modifyuser,jdbcType=VARCHAR}, 
+      #{modifytime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mj.im.entity.ZCChatRoomMember">
+    insert into zcchatroommember
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memberid != null">
+        MemberID,
+      </if>
+      <if test="chatroomid != null">
+        ChatRoomID,
+      </if>
+      <if test="membertype != null">
+        MemberType,
+      </if>
+      <if test="gag != null">
+        Gag,
+      </if>
+      <if test="prohibit != null">
+        Prohibit,
+      </if>
+      <if test="prop1 != null">
+        Prop1,
+      </if>
+      <if test="prop2 != null">
+        Prop2,
+      </if>
+      <if test="prop3 != null">
+        Prop3,
+      </if>
+      <if test="prop4 != null">
+        Prop4,
+      </if>
+      <if test="adduser != null">
+        AddUser,
+      </if>
+      <if test="addtime != null">
+        AddTime,
+      </if>
+      <if test="modifyuser != null">
+        ModifyUser,
+      </if>
+      <if test="modifytime != null">
+        ModifyTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memberid != null">
+        #{memberid,jdbcType=VARCHAR},
+      </if>
+      <if test="chatroomid != null">
+        #{chatroomid,jdbcType=VARCHAR},
+      </if>
+      <if test="membertype != null">
+        #{membertype,jdbcType=VARCHAR},
+      </if>
+      <if test="gag != null">
+        #{gag,jdbcType=INTEGER},
+      </if>
+      <if test="prohibit != null">
+        #{prohibit,jdbcType=INTEGER},
+      </if>
+      <if test="prop1 != null">
+        #{prop1,jdbcType=VARCHAR},
+      </if>
+      <if test="prop2 != null">
+        #{prop2,jdbcType=VARCHAR},
+      </if>
+      <if test="prop3 != null">
+        #{prop3,jdbcType=VARCHAR},
+      </if>
+      <if test="prop4 != null">
+        #{prop4,jdbcType=VARCHAR},
+      </if>
+      <if test="adduser != null">
+        #{adduser,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null">
+        #{modifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mj.im.entity.ZCChatRoomMember">
+    update zcchatroommember
+    <set>
+      <if test="membertype != null">
+        MemberType = #{membertype,jdbcType=VARCHAR},
+      </if>
+      <if test="gag != null">
+        Gag = #{gag,jdbcType=INTEGER},
+      </if>
+      <if test="prohibit != null">
+        Prohibit = #{prohibit,jdbcType=INTEGER},
+      </if>
+      <if test="prop1 != null">
+        Prop1 = #{prop1,jdbcType=VARCHAR},
+      </if>
+      <if test="prop2 != null">
+        Prop2 = #{prop2,jdbcType=VARCHAR},
+      </if>
+      <if test="prop3 != null">
+        Prop3 = #{prop3,jdbcType=VARCHAR},
+      </if>
+      <if test="prop4 != null">
+        Prop4 = #{prop4,jdbcType=VARCHAR},
+      </if>
+      <if test="adduser != null">
+        AddUser = #{adduser,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        AddTime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null">
+        ModifyUser = #{modifyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="modifytime != null">
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where MemberID = #{memberid,jdbcType=VARCHAR}
+      and ChatRoomID = #{chatroomid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mj.im.entity.ZCChatRoomMember">
+    update zcchatroommember
+    set MemberType = #{membertype,jdbcType=VARCHAR},
+      Gag = #{gag,jdbcType=INTEGER},
+      Prohibit = #{prohibit,jdbcType=INTEGER},
+      Prop1 = #{prop1,jdbcType=VARCHAR},
+      Prop2 = #{prop2,jdbcType=VARCHAR},
+      Prop3 = #{prop3,jdbcType=VARCHAR},
+      Prop4 = #{prop4,jdbcType=VARCHAR},
+      AddUser = #{adduser,jdbcType=VARCHAR},
+      AddTime = #{addtime,jdbcType=TIMESTAMP},
+      ModifyUser = #{modifyuser,jdbcType=VARCHAR},
+      ModifyTime = #{modifytime,jdbcType=TIMESTAMP}
+    where MemberID = #{memberid,jdbcType=VARCHAR}
+      and ChatRoomID = #{chatroomid,jdbcType=VARCHAR}
+  </update>
+</mapper>
