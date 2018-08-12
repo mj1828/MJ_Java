@@ -1,15 +1,11 @@
 package com.mj.im.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mj.zas.entity.ZAUser;
@@ -22,7 +18,7 @@ import com.mj.zas.service.UserService;
  *
  */
 @Service
-public class IMSevice {
+public class IMUserInfoService {
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
 
@@ -33,19 +29,18 @@ public class IMSevice {
 
 	private final String USERINFO = "UserInfo"; // 聊天室用户列表
 
-	private final String SYCN = "";
+	private static final String SYCN = "sycn";
 
 	// 聊天室添加用户
 	public boolean add(String chatRoomId, String userName) {
 		synchronized (SYCN) {
-			if (UserSessionService.containsKey(userName)) {
+			if (IMUserSessionService.containsKey(userName)) {
 				JSONObject userInfo = getUserInfo(userName);
 				userInfo.put("ChatRoomId", chatRoomId);
 				redisTemplate.opsForHash().put(USERINFO, userName, userInfo);
 				if (redisTemplate.opsForList().remove(CHATROOMLIST + chatRoomId, 1, userName) != null) {
 					long result = redisTemplate.opsForList().rightPush(CHATROOMLIST + chatRoomId, userName);
 					if (result > 0) {// 发送消息
-						msgToChatRoom(chatRoomId, getOnLineMsg(userInfo));
 						return true;
 					}
 				}
@@ -57,13 +52,11 @@ public class IMSevice {
 	// 聊天室删除用户
 	public boolean del(String userName) {
 		synchronized (SYCN) {
-			if (UserSessionService.del(userName)) {
+			if (IMUserSessionService.del(userName)) {
 				JSONObject userInfo = (JSONObject) redisTemplate.opsForHash().get(USERINFO, userName);
 				redisTemplate.opsForHash().delete(USERINFO, userName);
 				String chatRoomId = userInfo.getString("ChatRoomId");
 				if (redisTemplate.opsForList().remove(CHATROOMLIST + chatRoomId, 1, userName) != null) {
-					JSONObject msgInfo = getUserInfo(userName);
-					msgToChatRoom(chatRoomId, getOffLineMsg(msgInfo));
 					return true;
 				}
 			}
@@ -71,47 +64,6 @@ public class IMSevice {
 		}
 	}
 
-	// 发送给聊天室
-	public boolean msgToChatRoom(String chatRoomId, String userName, String msgContent) {
-		JSONObject userInfo = getUserInfo(userName);
-		return msgToChatRoom(chatRoomId, getMsg(userInfo, msgContent));
-
-	}
-
-	// 发送给聊天室
-	public boolean msgToChatRoom(String chatRoomId, String msg) {
-		synchronized (SYCN) {
-			List<String> userlist = redisTemplate.opsForList().range(CHATROOMLIST + chatRoomId, 0, -1);
-			userlist.forEach(user -> {
-				try {
-					WebSocketSession session = UserSessionService.get(user);
-					if (session != null) {
-						session.sendMessage(new TextMessage(msg));
-						System.out.println("发送聊天室消息");
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
-			return true;
-		}
-	}
-
-	// 发送给用户
-	public boolean msgToUser(String userName, String msg) {
-		synchronized (SYCN) {
-			try {
-				WebSocketSession session = UserSessionService.get(userName);
-				if (session != null) {
-					session.sendMessage(new TextMessage(msg));
-					System.out.println("发送用户");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return true;
-		}
-	}
 	// 获取聊天室所有用户
 	public ArrayList<JSONObject> chatRoomUsers(String chatRoomId) {
 		ArrayList<JSONObject> userList = new ArrayList<JSONObject>();
@@ -126,26 +78,8 @@ public class IMSevice {
 		return userList;
 	}
 
-	// 上线消息
-	private String getOnLineMsg(JSONObject msg) {
-		msg.put("MsgType", "上线");
-		msg.put("SendTime", System.currentTimeMillis());
-		return msg.toString();
-	}
-
-	// 下线消息
-	private String getOffLineMsg(JSONObject msg) {
-		msg.put("MsgType", "下线");
-		msg.put("SendTime", System.currentTimeMillis());
-		return msg.toString();
-	}
-
-	// 基本消息
-	private String getMsg(JSONObject msg, String msgContent) {
-		msg.put("MsgType", "基本类型");
-		msg.put("Msg", msgContent);
-		msg.put("SendTime", System.currentTimeMillis());
-		return msg.toString();
+	public JSONObject userInfo(String userName) {
+		return (JSONObject) redisTemplate.opsForHash().get(USERINFO, userName);
 	}
 
 	// 获取用户信息

@@ -14,28 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mj.im.service.IMSevice;
 
 @RestController
 public class WebSocketController {
 
 	@Autowired
 	private SimpMessageSendingOperations simpMessageSendingOperations;
-
-	@Autowired
-	IMSevice imSevice;
-
-	@MessageMapping("/onLine")
-	public void onLine(String message) {
-		JSONObject msg = JSONObject.parseObject(message);
-		imSevice.add(msg.getString("ChatRoomId"), msg.getString("UserName"));
-	}
-
-	@MessageMapping("/msgtoall")
-	public void msgtoall(String message) {
-		JSONObject msg = JSONObject.parseObject(message);
-		imSevice.msgToChatRoom(msg.getString("ChatRoomId"), msg.getString("UserName"), "消息体");
-	}
 
 	/**
 	 * 表示服务端可以接收客户端通过主题“/app/hello”发送过来的消息，客户端需要在主题"/topic/hello"上监听并接收服务端发回的消息
@@ -45,8 +29,7 @@ public class WebSocketController {
 	 */
 	@MessageMapping("/hello") // "/hello"为WebSocketConfig类中registerStompEndpoints()方法配置的
 	@SendTo("/topic/greetings")
-	public JSONObject greeting(@Header("atytopic") String topic, @Headers Map<String, Object> headers,
-			String message) {
+	public JSONObject greeting(@Header("atytopic") String topic, @Headers Map<String, Object> headers, String message) {
 		System.out.println("connected successfully....");
 		System.out.println(topic);
 		System.out.println(headers);

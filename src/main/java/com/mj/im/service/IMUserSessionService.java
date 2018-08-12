@@ -4,7 +4,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.web.socket.WebSocketSession;
 
-public class UserSessionService {
+/**
+ * 保存在线用户
+ * @author: MJ 
+ * @date: 2018年8月12日
+ */
+public class IMUserSessionService {
 
 	private static ConcurrentHashMap<String, WebSocketSession> userInfos = new ConcurrentHashMap<String, WebSocketSession>();
 
@@ -24,6 +29,7 @@ public class UserSessionService {
 	public static boolean containsKey(String userName) {
 		return userInfos.containsKey(userName);
 	}
+
 	public static WebSocketSession get(String userName) {
 		if (userInfos.containsKey(userName)) {
 			return userInfos.get(userName);

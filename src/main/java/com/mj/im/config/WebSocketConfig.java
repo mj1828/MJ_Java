@@ -2,7 +2,10 @@ package com.mj.im.config;
 
 import java.security.Principal;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketHandler;
@@ -14,11 +17,23 @@ import org.springframework.web.socket.config.annotation.WebSocketTransportRegist
 import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 
-import com.mj.im.service.UserSessionService;
+import com.alibaba.fastjson.JSONObject;
+import com.mj.im.service.IMUserInfoService;
+import com.mj.im.service.IMUserSessionService;
 
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+	@Autowired
+	private IMUserInfoService imUserInfoService;
+
+	@Autowired
+	private KafkaTemplate<String, String> kafkaTemplate;
+
+	@Value("${mj.kafka.msgTopic}")
+	private String msgTopic; // 消息主题
+
 	/**
 	 * 将"/hello"路径注册为STOMP端点，这个路径与发送和接收消息的目的路径有所不同，这是一个端点，客户端在订阅或发布消息到目的地址前，要连接该端点，
 	 * 即用户发送请求url="/applicationName/hello"与STOMP server进行连接。之后再转发到订阅url；
@@ -57,7 +72,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 						// 客户端与服务器端建立连接后，此处记录谁上线了
 						Principal userInfo = session.getPrincipal();
 						if (userInfo != null) {
-							UserSessionService.add(userInfo.getName(), session);
+							IMUserSessionService.add(userInfo.getName(), session);
 							System.err.println("保存用户到列表" + userInfo.getName());
 						}
 						super.afterConnectionEstablished(session);
@@ -67,10 +82,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 					public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus)
 							throws Exception {
 						// 客户端与服务器端断开连接后，此处记录谁下线了
-						Principal userInfo = session.getPrincipal();
-						if (userInfo != null) {
-							UserSessionService.del(userInfo.getName());
-							System.err.println("将用户从列表中删除" + userInfo.getName());
+						Principal principal = session.getPrincipal();
+						if (principal != null) {
+							String userName = principal.getName();
+							// 删除缓存session信息
+							IMUserSessionService.del(userName);
+							// 删除用户缓存信息
+							JSONObject userInfo = imUserInfoService.userInfo(userName);
+							imUserInfoService.del(userName);
+							// 发送下线消息
+							JSONObject msg = new JSONObject();
+							msg.put("UserName", userName);
+							msg.put("MsgType", "OffLine");
+							kafkaTemplate.send(msgTopic, userInfo.getString("ChatRoomId"), msg.toString());
+							System.err.println("将用户从列表中删除" + userName);
 						}
 						super.afterConnectionClosed(session, closeStatus);
 					}

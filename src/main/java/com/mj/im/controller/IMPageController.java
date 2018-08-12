@@ -1,12 +1,14 @@
 package com.mj.im.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mj.im.service.IMUserInfoService;
 import com.mj.util.ResultUtil;
 import com.mj.util.StringUtil;
 
@@ -19,11 +21,37 @@ import com.mj.util.StringUtil;
 public class IMPageController {
 
 	@Autowired
-	private KafkaTemplate<String, JSONObject> kafkaTemplate;
+	private KafkaTemplate<String, String> kafkaTemplate;
 
-	private static final String MSGTOPIC = "msgTopic";// 消息主题
+	@Autowired
+	private IMUserInfoService imService;
 
-	private static final String WBMSGTOPIC = "wbMsgtopic";// 白板消息主题
+	@Value("${mj.kafka.msgTopic}")
+	private String msgTopic; // 消息主题
+
+	@Value("${mj.kafka.wbMsgtopic}")
+	private String wbMsgtopic;// 白板消息主题
+
+	/**
+	 * @Description: 上线消息
+	 * @return String  
+	 * @throws
+	 */
+	@MessageMapping("onLineMsg")
+	public String onLineMsg(@RequestBody String msg) {
+		if (StringUtil.isNotNull(msg)) {
+			JSONObject msgContent = JSONObject.parseObject(msg);
+			if (msgContent != null) {
+				String chatRoomId = msgContent.getString("ChatRoomId");
+				if (StringUtil.isNotNull(chatRoomId)) {
+					imService.add(chatRoomId, msgContent.getString("UserName"));
+					kafkaTemplate.send(msgTopic, chatRoomId, msgContent.toString());
+					return ResultUtil.success("上线消息发送成功！");
+				}
+			}
+		}
+		return ResultUtil.fail("上线消息发送失败！");
+	}
 
 	/**
 	 * @Description: 接受消息，发布到kafka
@@ -39,7 +67,7 @@ public class IMPageController {
 			if (msgContent != null) {
 				String chatRoomId = msgContent.getString("ChatRoomId");
 				if (StringUtil.isNotNull(chatRoomId)) {
-					kafkaTemplate.send(MSGTOPIC, chatRoomId, msgContent);
+					kafkaTemplate.send(msgTopic, chatRoomId, msgContent.toString());
 					return ResultUtil.success("消息发送成功");
 				}
 			}
@@ -60,7 +88,7 @@ public class IMPageController {
 			if (msgContent != null) {
 				String chatRoomId = msgContent.getString("ChatRoomId");
 				if (StringUtil.isNotNull(chatRoomId)) {
-					kafkaTemplate.send(WBMSGTOPIC, chatRoomId, msgContent);
+					kafkaTemplate.send(wbMsgtopic, chatRoomId, msgContent.toString());
 					return ResultUtil.success("白板消息发送成功");
 				}
 			}
