@@ -1,5 +1,7 @@
 package com.mj.im.mapper;
 
+import java.util.List;
+
 import com.mj.im.entity.ZCChatRoom;
 
 public interface ZCChatRoomMapper {
@@ -14,4 +16,8 @@ public interface ZCChatRoomMapper {
     int updateByPrimaryKeySelective(ZCChatRoom record);
 
     int updateByPrimaryKey(ZCChatRoom record);
+
+	List<ZCChatRoom> list();
+
+	ZCChatRoom chatRoomById(String id);
 }

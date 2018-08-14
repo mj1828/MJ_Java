@@ -209,4 +209,11 @@
       ModifyTime = #{modifytime,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+  
+   <select id="list" resultType="ZCChatRoom"> 
+  	select * from zcchatroom order by addtime desc
+  </select>
+   <select id="chatRoomById" parameterType="String" resultType="ZCChatRoom">
+  	select * from zcchatroom where id = #{id}
+  </select>
 </mapper>
